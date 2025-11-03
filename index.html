@@ -149,31 +149,49 @@
   <h1>UPenn at NeurIPS 2025</h1>
   <p>This page summarizes the collaborations, faculty participation, and keyword trends for University of Pennsylvania papers at NeurIPS 2025.</p>
   <h2>UPenn Papers at NeurIPS 2025</h2>
-<button id="toggle-papers" class="toggle-btn">📂 Show Paper List</button>
-<div id="papers-container" class="collapsible"></div>
+  <input
+  type="text"
+  id="paper-search"
+  placeholder="🔍 Search papers by title, author, or keyword..."
+  style="width:100%; padding:0.6rem 0.8rem; margin:1rem 0; border-radius:8px; border:1px solid #ccc; font-size:1rem;"
+  >
+  <button id="toggle-papers" class="toggle-btn">📂 Show Paper List</button>
+  <div id="papers-container" class="collapsible"></div>
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("papers-container");
+    const toggleBtn = document.getElementById("toggle-papers");
+    const searchInput = document.getElementById("paper-search");
 
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("papers-container");
-  const toggleBtn = document.getElementById("toggle-papers");
+    // Load external HTML into container
+    try {
+      const response = await fetch("papers.html");
+      const html = await response.text();
+      container.innerHTML = html;
+    } catch (err) {
+      container.innerHTML = "<p style='color:red'>⚠️ Failed to load papers list.</p>";
+      console.error(err);
+    }
 
-  // Load external HTML into container
-  try {
-    const response = await fetch("papers.html");
-    const html = await response.text();
-    container.innerHTML = html;
-  } catch (err) {
-    container.innerHTML = "<p style='color:red'>⚠️ Failed to load papers list.</p>";
-    console.error(err);
-  }
+    // --- Collapsible logic ---
+    toggleBtn.addEventListener("click", () => {
+      const isOpen = container.classList.toggle("open");
+      toggleBtn.textContent = isOpen ? "📁 Hide Paper List" : "📂 Show Paper List";
+    });
 
-  // Collapsible logic
-  toggleBtn.addEventListener("click", () => {
-    const isOpen = container.classList.toggle("open");
-    toggleBtn.textContent = isOpen ? "📁 Hide Paper List" : "📂 Show Paper List";
+    // --- Search logic ---
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      const papers = container.querySelectorAll(".paper");
+
+      papers.forEach(paper => {
+        const text = paper.textContent.toLowerCase();
+        paper.style.display = text.includes(query) ? "block" : "none";
+      });
+    });
   });
-});
-</script>
+  </script>
+
 
   <h2>Top Collaborating Institutions</h2>
   <img src="img/top_affiliations.png" alt="Top Collaborating Institutions">
