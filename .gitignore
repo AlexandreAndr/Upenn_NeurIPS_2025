@@ -1,6 +1,9 @@
 viz.py
 venv
+myenv
 __pycache__
 **.csv
 **.ipynb
+**.env.env
+.env.*
 **.env
